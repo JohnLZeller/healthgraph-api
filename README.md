@@ -61,6 +61,35 @@ included _setup.py_ script for installation:
 	./setup.py install
 	
 
+Example
+------------
+This example serves to demonstrate basic functionality.
+
+```python
+python
+>>> import healthgraph
+>>> auth = healthgraph.authmgr.AuthManager('123456789abcdefghijklmnopqrstuvw', 'wvutsrqponmlkjihgfedcba987654321', 'http://www.example.com')
+>>> auth.get_login_url()
+'https://runkeeper.com/apps/authorize?redirect_uri=http%3A%2F%2Fwww.example.com&response_type=code&client_id=123456789abcdefghijklmnopqrstuvw'
+```
+
+Visit the link printed by the call to auth.get_login_url() in your Browser and allow access to your application. Once you are redirected, look for the code in the address bar. You should see something like 'http://www.example.com/?code=wvutsrqponml987654321kjihgfedcba'
+
+```python
+>>> access_token = auth.get_access_token('wvutsrqponml987654321kjihgfedcba')
+>>> healthgraph.init_session(access_token)
+>>> user = healthgraph.resources.User()
+```
+
+Your session is active and you have your User object, so now you can grab your data! For instance, let's say I wanted to see how many miles I have run this week.
+
+```python
+>>> user.get_records()._prop_dict['totals']['Running']['THIS_WEEK']
+0.0
+```
+
+That's it for this short example!
+
 Licensing
 ---------
 
